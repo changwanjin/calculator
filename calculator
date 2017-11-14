@@ -1,0 +1,129 @@
+import tkinter
+#创建面板
+root = tkinter.Tk()
+root.minsize(185,250)
+root.maxsize(185,250)
+root.title('计算器')
+
+#判断是否输入运算符标志,没按是true ，按下之后变false
+rs = True  
+
+#执行函数
+def huoqu(evt):
+    global rs
+
+    if label['text']=='0':
+#特殊符号处理
+        if evt.widget['text'] == 'C':
+            label['text'] = '0'
+            
+        elif evt.widget['text']=='CE':
+            label['text']='0'
+            
+        elif evt.widget['text']=='±':
+            label['text']='0'
+            
+        elif evt.widget['text']=='←':
+            label['text']='0'
+        elif evt.widget['text'] in ['+','-','*','/','=']:
+            label['text']='0'
+        elif evt.widget['text']=='.':
+            label['text'] = label['text'] + evt.widget['text']
+        else:    
+            label['text'] = evt.widget['text']
+    else:
+        
+#特殊符号处理'C','CE','←','±'       
+        if evt.widget['text'] == 'C':
+            label['text'] = '0'
+            
+#'CE'功能添加            
+        elif evt.widget['text']=='CE':
+            if '+' in label['text']:                
+                label_index = label['text'].find('+')
+                label['text'] = label['text'][:label_index+1]
+            elif '-' in label['text']:
+                label_index = label['text'].find('-')
+                label['text'] = label['text'][:label_index+1]
+            elif '*' in label['text']:    
+                label_index = label['text'].find('*')
+                label['text'] = label['text'][:label_index+1]
+            elif '/' in label['text']:
+                label_index = label['text'].find('/')
+                label['text'] = label['text'][:label_index+1]
+#'←'功能添加           
+        elif evt.widget['text']=='←':
+            label['text'] = label['text'][:-1]
+            print(label['text'])
+            if label['text']=='':
+                label['text'] = '0'
+                
+#'±'功能添加                
+        elif evt.widget['text']=='±':
+            if '+' in label['text']:
+                label['text']=label['text'].replace('+','-')
+            elif '-' in label['text']:
+                label['text']=label['text'].replace('-','+')
+                
+#解决多次输入小数点和运算符号进行处理                
+        elif label['text'].count('.')==1 and evt.widget['text']=='.':
+            return
+        elif label['text'].count('+')==1 and evt.widget['text'] in ['+','-','*','/']:
+            label['text'] = label['text'].replace('+',evt.widget['text'])    
+        elif label['text'].count('-')==1 and evt.widget['text'] in ['+','-','*','/']:
+            label['text'] = label['text'].replace('-',evt.widget['text'])
+        elif label['text'].count('*')==1 and evt.widget['text'] in ['+','-','*','/']:
+            label['text'] = label['text'].replace('*',evt.widget['text'])
+        elif label['text'].count('/')==1 and evt.widget['text'] in ['+','-','*','/']:
+            label['text'] = label['text'].replace('/',evt.widget['text'])
+            
+#如果是等号就进行运算,运算之后rs=false            
+        elif evt.widget['text'] == '=':
+            label['text'] = str(eval(label['text']))
+            rs = False
+            
+#计算之后，如果连续计算需修改rs值，否则重新进入下次运算
+        elif rs == True or evt.widget['text'] in ['+','-','*','/']:            
+            label['text'] = label['text']+evt.widget['text']
+            rs = True
+            
+#判断，重置运算状态
+        elif rs == False:
+            label['text'] = evt.widget['text']
+            rs = True
+
+#Label标签
+label = tkinter.Label(root,text='0', bg = '#ffffff',width=22,height=2,font=("黑体", 10, "bold"),anchor='e')
+label.grid(row=0,column=0,columnspan = 4)
+
+#按键区域
+button_del = tkinter.Button(root,text = '←',width = 5,height =1,bg='#E0EEEE')
+button_del.grid(row = 1,column = 0)
+button_clear = tkinter.Button(root,text = 'C',width = 5,height =1,bg='#E0EEEE').grid(row = 1,column = 1)
+button_fan = tkinter.Button(root,text = '±',width = 5,height =1,bg='#E0EEEE').grid(row = 1,column = 2)
+button_ce = tkinter.Button(root,text = 'CE',width = 5,height =1,bg='#E0EEEE').grid(row = 1,column = 3)
+
+button_1 = tkinter.Button(root,text = '1',width = 5,height =2,bg='#E0EEEE').grid(row = 2,column = 0)
+button_2 = tkinter.Button(root,text = '2',width = 5,height =2,bg='#E0EEEE').grid(row = 2,column = 1)
+button_3 = tkinter.Button(root,text = '3',width = 5,height =2,bg='#E0EEEE').grid(row = 2,column = 2)
+button_jia = tkinter.Button(root,text = '+',width = 5,height =2,bg='#E0EEEE').grid(row = 2,column = 3)
+
+button_4 = tkinter.Button(root,text = '4',width = 5,height =2,bg='#E0EEEE').grid(row = 3,column = 0)
+button_5 = tkinter.Button(root,text = '5',width = 5,height =2,bg='#E0EEEE').grid(row = 3,column = 1)
+button_6 = tkinter.Button(root,text = '6',width = 5,height =2,bg='#E0EEEE').grid(row = 3,column = 2)
+button_jian = tkinter.Button(root,text = '-',width = 5,height =2,bg='#E0EEEE').grid(row = 3,column = 3)
+
+button_7 = tkinter.Button(root,text = '7',width = 5,height =2,bg='#E0EEEE').grid(row = 4,column = 0)
+button_8 = tkinter.Button(root,text = '8',width = 5,height =2,bg='#E0EEEE').grid(row = 4,column = 1)
+button_9 = tkinter.Button(root,text = '9',width = 5,height =2,bg='#E0EEEE').grid(row = 4,column = 2)
+button_cheng = tkinter.Button(root,text = '*',width = 5,height =2,bg='#E0EEEE').grid(row = 4,column = 3)
+
+button_0 = tkinter.Button(root,text = '0',width = 5,height =2,bg='#E0EEEE').grid(row = 5,column = 0)
+button_dian = tkinter.Button(root,text = '.',width = 5,height =2,bg='#E0EEEE').grid(row = 5,column = 1)
+button_deng = tkinter.Button(root,text = '=',width = 5,height =2,bg='#E0EEEE').grid(row = 5,column = 2)
+button_chu = tkinter.Button(root,text = '/',width = 5,height =2,bg='#E0EEEE').grid(row = 5,column = 3)
+
+#所有按钮的事件处罚
+button_del.bind_all('<Button-1>',huoqu)
+
+root.mainloop()
